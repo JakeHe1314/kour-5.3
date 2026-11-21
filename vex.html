@@ -12,11 +12,33 @@
 <link rel="icon" href="assets/vex-logo-icon.png">
 <link rel="apple-touch-icon" href="assets/vex-logo-icon.png">
 <title>Vex 音乐 · Kour社</title>
+<script>
+try{
+  var vtheme = localStorage.getItem('vexBrandTheme');
+  if (vtheme === 'white') vtheme = 'hidden';
+  if (vtheme === 'pink' || vtheme === 'hidden' || vtheme === 'purple'){
+    document.documentElement.setAttribute('data-brand-theme', vtheme);
+  }
+}catch(e){}
+</script>
 <style>
   :root{
     --base: clamp(160px, 30vmin, 400px);
     --ink:#2A251E;
     --ink-soft:#7E7767;
+    --vb-bg:#ffe3ed;
+    --vb-ink:#d9638b;
+    --vb-border:rgba(201,112,140,.30);
+    --vb-shadow:0 8px 22px rgba(196,113,139,.24);
+    --vb-panel:rgba(255,252,248,.88);
+    --vb-panel-border:rgba(74,52,40,.12);
+    --vb-label:#7a6b62;
+  }
+  :root[data-brand-theme="purple"]{
+    --vb-bg:#241f2c;
+    --vb-ink:#d1bfe8;
+    --vb-border:rgba(194,168,224,.28);
+    --vb-shadow:0 8px 24px rgba(51,37,75,.32);
   }
 
   *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
@@ -589,25 +611,86 @@
     .paper, .slot, .playbar{ transition:none; }
   }
   /* ===== VEX 顶部品牌标 ===== */
-  .vbrand{
+  .vbrand-wrap{
     position:absolute; z-index:45;
     left:clamp(16px, 3.2vw, 40px);
     top:clamp(12px, 2.6vh, 28px);
+    display:flex; align-items:flex-start; gap:8px;
+  }
+  .vbrand{
     padding:9px 13px 10px;
-    background:rgba(14,13,11,.92);
-    border:1px solid rgba(255,255,255,.10);
+    background:var(--vb-bg);
+    border:1px solid var(--vb-border);
     border-radius:10px;
-    box-shadow:0 8px 22px rgba(55,42,22,.18);
+    box-shadow:var(--vb-shadow);
     pointer-events:none; user-select:none;
+    transition:background .24s ease, border-color .24s ease, box-shadow .24s ease;
   }
-  .vbrand img{
-    display:block; height:clamp(36px, 5.2vw, 50px); width:auto;
+  .vbrand-word, .vbrand-icon{
+    display:block;
+    background-color:var(--vb-ink);
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    -webkit-mask-position:center; mask-position:center;
+    -webkit-mask-size:contain; mask-size:contain;
+    transition:background-color .24s ease, filter .24s ease;
   }
-  .vbrand .vbrand-icon{ display:none; }
+  .vbrand-word{
+    height:clamp(36px, 5.2vw, 50px);
+    width:clamp(82px, 11.8vw, 114px);
+    -webkit-mask-image:url("assets/vex-logo-horizontal.png");
+    mask-image:url("assets/vex-logo-horizontal.png");
+  }
+  .vbrand-icon{
+    display:none;
+    height:38px;
+    width:27px;
+    -webkit-mask-image:url("assets/vex-logo-icon.png");
+    mask-image:url("assets/vex-logo-icon.png");
+  }
+  :root[data-brand-theme="hidden"] .vbrand{
+    display:none;
+  }
+  .vtheme{
+    display:flex; align-items:center; gap:6px;
+    padding:7px 9px;
+    border-radius:999px;
+    background:var(--vb-panel);
+    border:1px solid var(--vb-panel-border);
+    box-shadow:0 6px 16px rgba(55,42,28,.09);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  }
+  .vtheme-label{
+    font:500 10px/1 "Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+    letter-spacing:.12em; color:var(--vb-label);
+    white-space:nowrap;
+  }
+  .vtheme-dot{
+    width:16px; height:16px; border-radius:50%;
+    border:1.5px solid transparent; padding:0; cursor:pointer;
+    transition:border-color .2s ease, transform .2s ease, opacity .2s ease;
+  }
+  .vtheme-dot:hover{ transform:scale(1.08); opacity:1; }
+  .vtheme-dot[aria-pressed="false"]{ opacity:.72; box-shadow:none; }
+  .vtheme-dot[data-set-theme="pink"]{ background:#ffb3c8; }
+  .vtheme-dot[data-set-theme="hidden"]{
+    background:
+      linear-gradient(135deg, transparent calc(50% - 1px), #9a9083 calc(50% - 1px), #9a9083 calc(50% + 1px), transparent calc(50% + 1px)),
+      #f1ece2;
+    box-shadow:inset 0 0 0 1px rgba(52,42,32,.16);
+  }
+  .vtheme-dot[data-set-theme="purple"]{ background:#3a3145; }
+  .vtheme-dot[aria-pressed="true"]{
+    border-color:#fff;
+    box-shadow:0 0 0 1.5px rgba(43,35,28,.55);
+    transform:scale(1.04);
+  }
+  .vtheme-dot:focus-visible{ outline:2px solid #2b231c; outline-offset:2px; }
   @media (max-width:640px){
     .vbrand{ padding:8px 11px 9px; border-radius:8px; }
     .vbrand .vbrand-word{ display:none; }
-    .vbrand .vbrand-icon{ display:block; height:38px; }
+    .vbrand .vbrand-icon{ display:block; }
+    .vtheme{ padding:6px 8px; gap:5px; }
+    .vtheme-label{ display:none; }
   }
 
   /* ===== 每页标题 ===== */
@@ -763,9 +846,17 @@
 
 <div class="book" id="book">
 <div class="stage" id="stage">
-  <div class="vbrand">
-    <img class="vbrand-word" src="assets/vex-logo-horizontal.png" alt="VEX 音乐">
-    <img class="vbrand-icon" src="assets/vex-logo-icon.png" alt="VEX 音乐">
+  <div class="vbrand-wrap">
+    <div class="vbrand">
+      <span class="vbrand-word" role="img" aria-label="VEX 音乐"></span>
+      <span class="vbrand-icon" role="img" aria-label="VEX 音乐"></span>
+    </div>
+    <div class="vtheme" role="group" aria-label="Logo 颜色切换">
+      <span class="vtheme-label">Logo</span>
+      <button type="button" class="vtheme-dot" data-set-theme="pink" title="浅粉 · 可爱风" aria-label="浅粉" aria-pressed="true"></button>
+      <button type="button" class="vtheme-dot" data-set-theme="hidden" title="隐藏 Logo" aria-label="隐藏 Logo" aria-pressed="false"></button>
+      <button type="button" class="vtheme-dot" data-set-theme="purple" title="淡黑紫 · 高级风" aria-label="淡黑紫" aria-pressed="false"></button>
+    </div>
   </div>
   <div class="ptitle ptitle-brand">推荐</div>
 
@@ -2288,6 +2379,32 @@
     });
     layoutPage(p);
   });
+})();
+</script>
+<script>
+(function(){
+  var root = document.documentElement;
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-set-theme]'));
+  function applyTheme(theme, persist){
+    if (theme !== 'pink' && theme !== 'hidden' && theme !== 'purple') theme = 'pink';
+    root.setAttribute('data-brand-theme', theme);
+    buttons.forEach(function(btn){
+      btn.setAttribute('aria-pressed', btn.getAttribute('data-set-theme') === theme ? 'true' : 'false');
+    });
+    if (persist){
+      try{ localStorage.setItem('vexBrandTheme', theme); }catch(e){}
+    }
+  }
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){ applyTheme(btn.getAttribute('data-set-theme'), true); });
+  });
+  var saved = 'pink';
+  try{
+    var stored = localStorage.getItem('vexBrandTheme');
+    if (stored === 'white') stored = 'hidden';
+    if (stored === 'pink' || stored === 'hidden' || stored === 'purple') saved = stored;
+  }catch(e){}
+  applyTheme(saved, false);
 })();
 </script>
 </body>
