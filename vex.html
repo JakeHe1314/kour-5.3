@@ -4,7 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#E9E4D8">
-<title>Vex</title>
+<meta name="description" content="Kour社 · Vex 音乐，一张张可以翻听的纸质音乐卡片。">
+<meta property="og:title" content="Vex 音乐 · Kour社">
+<meta property="og:description" content="一张张可以翻听的纸质音乐卡片。">
+<meta property="og:image" content="https://jakehe1314.github.io/kour-5.3/assets/vex-logo-stacked.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/vex-logo-icon.png">
+<link rel="apple-touch-icon" href="assets/vex-logo-icon.png">
+<title>Vex 音乐 · Kour社</title>
 <style>
   :root{
     --base: clamp(160px, 30vmin, 400px);
@@ -581,11 +588,33 @@
     .fall{ animation:none !important; }
     .paper, .slot, .playbar{ transition:none; }
   }
+  /* ===== VEX 顶部品牌标 ===== */
+  .vbrand{
+    position:absolute; z-index:45;
+    left:clamp(16px, 3.2vw, 40px);
+    top:clamp(12px, 2.6vh, 28px);
+    padding:9px 13px 10px;
+    background:rgba(14,13,11,.92);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:10px;
+    box-shadow:0 8px 22px rgba(55,42,22,.18);
+    pointer-events:none; user-select:none;
+  }
+  .vbrand img{
+    display:block; height:clamp(36px, 5.2vw, 50px); width:auto;
+  }
+  .vbrand .vbrand-icon{ display:none; }
+  @media (max-width:640px){
+    .vbrand{ padding:8px 11px 9px; border-radius:8px; }
+    .vbrand .vbrand-word{ display:none; }
+    .vbrand .vbrand-icon{ display:block; height:38px; }
+  }
+
   /* ===== 每页标题 ===== */
   .ptitle{
     position:absolute; z-index:40;
     left:clamp(18px, 3.4vw, 44px);
-    top:clamp(14px, 3vh, 34px);
+    top:clamp(78px, 10vh, 104px);
     pointer-events:none; user-select:none;
     font-family:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
     font-weight:500;
@@ -598,6 +627,10 @@
   }
   @media (max-width:640px){
     .ptitle{ font-size:12px; letter-spacing:.26em; opacity:.86; }
+  }
+  .ptitle-brand{ top:clamp(116px, 14vh, 148px); }
+  @media (max-width:640px){
+    .ptitle-brand{ top:clamp(92px, 12.5vh, 118px); }
   }
   @media (max-width:640px){
     .fbar{ flex-direction:column; align-items:stretch; gap:12px; padding:0 6vw 22px; }
@@ -730,7 +763,11 @@
 
 <div class="book" id="book">
 <div class="stage" id="stage">
-  <div class="ptitle">推荐</div>
+  <div class="vbrand">
+    <img class="vbrand-word" src="assets/vex-logo-horizontal.png" alt="VEX 音乐">
+    <img class="vbrand-icon" src="assets/vex-logo-icon.png" alt="VEX 音乐">
+  </div>
+  <div class="ptitle ptitle-brand">推荐</div>
 
   <!--
     每片纸里放一首歌：--x/--y 落点，--r 旋转，--k 尺度，--z 层级，--tone 纸色，--cx/--cy 歌卡在纸上的位置
